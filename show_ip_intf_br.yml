@@ -17,6 +17,7 @@
     - name: CAPTURE SHOW IP INTERFACE BRIEF
       debug: var=interfaces.stdout
 
-    # - name: parse interaces using command_parser engine
-    #   command_parser:
-    #     file:
+    - name: parse interaces using command_parser engine
+      command_parser:
+        file: "parsers/ios/show_ip_interface_brief.yaml"
+        content: "{{ interfaces.stdout[0] }}"
