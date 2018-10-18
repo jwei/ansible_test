@@ -1,0 +1,23 @@
+- name: "show ip interface brief"
+  hosts: all  
+  gather_facts: no
+  connection: network_cli
+ 
+  roles:
+    - ansible-network.network-engine
+
+  tasks:
+    # Cisco IOS show cmd
+    - name: RUN CLI "SHOW IP INTERFACE BRIEF"
+      ios_command:
+        commands: show ip interface brief
+        wait_for: result[0] contains Interface
+      register: interfaces
+
+    - name: CAPTURE SHOW IP INTERFACE BRIEF
+      debug: var=interfaces.stdout
+
+    - name: parse interaces using command_parser engine
+      command_parser:
+        file: "parsers/ios/show_ip_interface_brief.yaml"
+        content: "{{ interfaces.stdout[0] }}"
